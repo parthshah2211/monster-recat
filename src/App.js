@@ -1,25 +1,48 @@
-import logo from './logo.svg';
+import React,{ Component } from 'react';
 import './App.css';
+import { Cardlist } from './component/cardlist/cardlist.component';
+import { SerchBox} from './component/serch-box/serchbox.component.jsx';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+constructor()
+  {
+super();
+this.state={
+
+monster:[],
+
+serchField: ''
+
+
+};
+}
+
+hendalchnage = (a) => this.setState({ serchField: a.target.value})
+
+componentDidMount(){
+ fetch('https://jsonplaceholder.typicode.com/users')
+.then(Response =>Response.json())
+.then(users => this.setState({monster: users })); 
+}
+    render(){
+      const {monster,serchField} =this.state;
+      const fillteredMonster =monster.filter(monster =>
+      monster.name.toLowerCase().includes(serchField.toLowerCase())  
+        );
+    return (
+<div className="App">
+<h1>Monster Index</h1>
+        <SerchBox 
+        placeholder='serch heros!!'
+        hendalchnage={this.hendalchnage}        />
+        <Cardlist monster={fillteredMonster} />
+
+
+       
+      </div>
+    );
+  }
 }
 
 export default App;
